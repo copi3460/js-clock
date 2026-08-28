@@ -36,10 +36,10 @@ const radius = 150;           // Urets størrelse ud fra midten
 
 ## 2. Grader vs. Radianer
 
-Computeren forstår ikke ($360^\circ$). Den bruger radianer.
+Computeren forstår ikke $360^\circ$. Den bruger radianer.
 
-- En hel cirkel ($360^\circ$) er lig med 2pi (ca. `6.28`).
-- En halv cirkel ($180^\circ$) er lig med pi (ca. `3.14`).
+- En hel cirkel ($360^\circ$) er lig med $2 \cdot \pi$ (ca. `6.28`).
+- En halv cirkel ($180^\circ$) er lig med $\pi$ (ca. `3.14`).
 
 Formlen for at lave grader om til radianer:  
 $$\text{radianer} = \text{grader} \cdot \left(\frac{\pi}{180}\right)$$ 
@@ -132,16 +132,16 @@ function tick() {
 
 Der er 60 sekunder på et minut.
 
-- En hel omgang er 2pi.
-- Ét sekund (eller ét minut) svarer til: 2pi/60 radianer.
+- En hel omgang er $2\pi$.
+- Ét sekund (eller ét minut) svarer til: $(2 \cdot \pi) / 60$ radianer.
 
-_Vigtigt:_ I matematik starter 0 radianer til højre (kl. 3). For at uret starter i toppen (kl. 12), trækker vi altid en kvart omgang fra vinklen: `-(Math.PI / 2)`.
+_Vigtigt:_ I matematik starter $0$ radianer til højre (kl. 3). For at uret starter i toppen (kl. 12), trækker vi altid en kvart omgang fra vinklen: `-(Math.PI / 2)`.
 
 ---
 
 ## 3. Tegne en viser med `moveTo` og `lineTo`
 
-Når vi tegner en viser (en lige linje), bruger vi `moveTo(fraX, fraY)` til at sætte pennen på midten `(cx, cy)`, og `lineTo(tilX, tilY)`til at trække stregen ud til urets kant baseret på vinklen (v).
+Når vi tegner en viser (en lige linje), bruger vi `moveTo(fraX, fraY)` til at sætte pennen på midten `(cx, cy)`, og `lineTo(tilX, tilY)`til at trække stregen ud til urets kant baseret på vinklen ($v$).
 
 Her er eksemplet for sekundviseren:
 
@@ -527,156 +527,25 @@ ctx.fill();
 - Uden `ctx.rotate(-vinkel)`: Hvis du prøver at fjerne den linje (og dens modpart i bunden), vil du se, at 6-tallet (eller VI) står helt på hovedet i bunden af uret, og 3-tallet ligger ned. Ved at mod-rotere lige inden vi skriver, sikrer vi, at alle tal står pænt og opret som på et rigtigt ur.
 
 ---
+Her er det komplette princip-eksempel, hvor vi dropper `ctx.rotate()` og i stedet bruger Cosinus (`Math.cos`) og Sinus (`Math.sin`) til at regne de præcise `(x, y)` koordinater ud for hvert enkelt tal.
 
+Dette er en fremragende øvelse, fordi det tvinger os til at forstå den rå geometri bag en cirkel.
 
+## Det vigtige matematiske princip:
 
-For at uret tikker, skal vi køre en funktion hvert sekund (1000 millisekunder). `new Date()` henter computerens ur lige nu.
+Når vi bruger `sin` og `cos` til tekst, skal vi huske den vigtige detalje, vi talte om tidligere: Computeren starter vinkel $0$til højre (klokken 3). For at få vores array-indeks `0` (som er "XII") til at starte i toppen (klokken 12), skal vi trække en kvart omgang fra vinklen via `-(Math.PI / 2)`.
 
-```javascript
-// Kør funktionen 'tick' hvert 1000. millisekund
-setInterval(tick, 1000);
-
-function tick() {
-    // 1. Rens canvasen, så gamle visere slettes
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    
-    // Redraw urskiven her (koden fra Sektion 1)
-    
-    // 2. Hent den aktuelle tid
-    const nu = new Date();
-    let sekunder = nu.getSeconds();
-    let minutter = nu.getMinutes();
-    let timer = nu.getHours();
-    let millisekunder = nu.getMilliseconds();
-    
-    // Nu kan vi bruge disse tal til at styre viserne!
-}
-```
-
----
-
-## 2. Opdeling af urskiven: Hvor mange radianer er et sekund?
-
-Der er 60 sekunder på et minut.
-
-- En hel omgang er $2\pi$.
-- Ét sekund (eller ét minut) svarer til: $(2 \cdot \pi) / 60$ radianer.
-
-_Vigtigt:_ I matematik starter $0$ radianer til højre (kl. 3). For at uret starter i toppen (kl. 12), trækker vi altid en kvart omgang fra vinklen: `-(Math.PI / 2)`.
-
----
-
-## 3. Tegne en viser med `moveTo` og `lineTo`
-
-Når vi tegner en viser (en lige linje), bruger vi `moveTo(fraX, fraY)` til at sætte pennen på midten `(cx, cy)`, og `lineTo(tilX, tilY)`til at trække stregen ud til urets kant baseret på vinklen ($v$).
-
-Her er eksemplet for sekundviseren:
-
-```javascript
-// Beregn vinklen for sekunderne (og juster så 0 er klokken 12)
-let v = sekunder * ((2 * Math.PI) / 60) - (Math.PI / 2);
-
-// Hvor lang skal sekundviseren være?
-let laengde = radius * 0.85; 
-
-// Find slutpunktet for viseren med cos og sin
-let x = cx + laengde * Math.cos(v);
-let y = cy + laengde * Math.sin(v);
-
-// Tegn viseren
-ctx.beginPath();
-ctx.moveTo(cx, cy); // Start i centrum
-ctx.lineTo(x, y);   // Gå ud til spidsen af viseren
-ctx.strokeStyle = "red";
-ctx.lineWidth = 2;   // Tynd viser til sekunder
-ctx.stroke();
-```
-
-_For Minutter og Timer gør du nøjagtig det samme, men ændrer `laengde` (f.eks. `radius * 0.7` for minutter) og `lineWidth`(gør dem tykkere)._  
-_For at få Timer + Minutter til at glide glat, lader du timens vinkel påvirkes en lille smule af, hvor mange minutter der er gået._
-
----
-
-## 4. Tekst på canvas: fillText() og Romertal
-
-Vi kan udskrive tekst som f.eks. tal direkte på canvas. Vi kan bruge et Array (en liste) til at holde Romertallene.
-
-```javascript
-ctx.font = "20px Georgia"; // Sæt skrifttype og størrelse
-ctx.fillStyle = "#333";
-ctx.textAlign = "center";
-ctx.textBaseline = "middle";
-
-const romertal = ["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
-
-for (let i = 0; i < 12; i++) {
-    // i = 0 svarer til XII (12), i = 1 svarer til I (1) osv.
-    // Vi trækker igen Math.PI/2 fra for at starte kl 12 i toppen
-    let vinkel = i * ((2 * Math.PI) / 12) - (Math.PI / 2);
-    
-    // Placer tallene en lille smule inden for kanten (radius * 0.75)
-    let x = cx + (radius * 0.75) * Math.cos(vinkel);
-    let y = cy + (radius * 0.75) * Math.sin(vinkel);
-    
-    // Skriv romertallet på koordinatsættet
-    ctx.fillText(romertal[i], x, y);
-}
-```
-
----
-
-Lad os skille koden ad og kigge på de tre vigtigste detaljer, der manglede en dyb forklaring:
-
----
-
-## Detalje 1: Hvorfor lige `Math.cos()` til X og `Math.sin()` til Y?
-
-Computeren tegner på et fladt koordinatsystem (et grid). Når vi vil tegne i en cirkel, kender vi en vinkel og en afstand (radius), men canvas skal bruge et præcist `(x, y)` punkt.
-
-- Cosinus (`Math.cos`) måler den vandrette afstand. Den fortæller os, hvor langt vi skal gå til højre eller venstre.
-- Sinus (`Math.sin`) måler den lodrette afstand. Den fortæller os, hvor langt vi skal gå op eller ned.
-
-Når vi skriver `radius * Math.cos(vinkel)`, omdanner vi vinklen til et præcist antal pixels på skærmen. Vi lægger `cx` og `cy` til, fordi vi skal starte målingen fra urets centrum (200, 200) i stedet for oppe i hjørnet (0, 0).
-
----
-
-## Detalje 2: Hvorfor starter computeren "Klokken 3"?
-
-I matematikken og på computeren starter $0$ radianer altid vandret til højre (svarende til klokken 3 på et ur). Vinklen bevæger sig _med uret_ derfra.
-
-Hvis vi lader loopet køre uden justering:
-
-- `i = 0` (første prik) lander klokken 3.
-- `i = 3` lander klokken 6 (lige i bunden).
-- `i = 6` lander klokken 9.
-- `i = 9` lander klokken 12 (lige i toppen).
-
-For at rette op på dette, så `i = 0` rent faktisk bliver til klokken 12 i toppen, skal vi dreje vores vinkel en kvart omgang _mod uret_. En kvart omgang i radianer svarer til $\frac{\pi}{2}$ (eller $90^\circ$). Derfor trækker vi altid `Math.PI / 2` fra vinklen.
-
----
-
-## Detalje 3: Hvad gør `ctx.beginPath()` og `ctx.fill()` egentlig bag kulisserne?
-
-Hvis du ikke lukker og åbner dine stier korrekt, tror canvas, at alt hvad du tegner, hænger sammen i én lang, usynlig streg.
-
-1. `ctx.beginPath()`: Dette nulstiller "hukommelsen" på penslen. Det fortæller canvas: _"Glem alt om den store urskive, jeg tegnede lige før. Nu starter en helt ny, uafhængig form (en lille prik)."_ Hvis du glemmer denne i loopet, vil canvas forsøge at binde alle de 12 prikker sammen med usynlige streger.
-2. Stien vs. Malingen: Når loopet kører `ctx.arc(...)`, tegner det kun en usynlig matematisk cirkel i luften. Der kommer intet på skærmen, før du kalder `ctx.fill()` eller `ctx.stroke()`, som fysisk hælder maling ud på det koordinatsæt, du lige har udregnet.
-
----
-
-## Opdateret JavaScript til din CodePen (Med rettet "Klokken 12" vinkel)
-
-Her er JavaScript-delen, hvor vinklen nu er korrigeret, så den første prik (`i = 0`) lander præcis i toppen af uret:
+Erstat JavaScript-delen i din CodePen med denne kode for at se det virke:
 
 ```javascript
 const canvas = document.getElementById("urCanvas");
 const ctx = canvas.getContext("2d");
 
-const cx = canvas.width / 2;  
-const cy = canvas.height / 2; 
-const radius = 160;           
+const cx = canvas.width / 2;  // Centrum X (200)
+const cy = canvas.height / 2; // Centrum Y (200)
+const radius = 160;           // Urets ydre radius
 
-// 1. TEGN URKSIVEN
+// --- 1. TEGN DEN HVIDE BAGGRUND ---
 ctx.beginPath(); 
 ctx.arc(cx, cy, radius, 0, 2 * Math.PI); 
 ctx.fillStyle = "#ffffff";     
@@ -685,27 +554,50 @@ ctx.lineWidth = 12;
 ctx.fill();   
 ctx.stroke(); 
 
-// 2. TEGN TIMEMARKERINGER (Nu justeret så vi starter i toppen!)
+// --- 2. INDSTIL TEKST-STYLES (Meget vigtigt for præcision!) ---
+ctx.font = "bold 20px 'Georgia', serif"; 
+ctx.fillStyle = "#2c3e50";     
+ctx.textAlign = "center";      // Centrer teksten vandret over X-punktet
+ctx.textBaseline = "middle";   // Centrer teksten lodret over Y-punktet
+
+// --- 3. ARRAY MED ROMERTAL ---
+// Indeks 0 er XII (kl. 12), Indeks 1 er I (kl. 1) osv.
+const romertal = ["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
+
+// --- 4. BEREGN OG TEGN HVERT TAL MED SIN OG COS ---
 for (let i = 0; i < 12; i++) {
-    // Detalje: Vi trækker (Math.PI / 2) fra for at flytte startpunktet fra kl. 3 op til kl. 12
-    let vinkel = i * ((2 * Math.PI) / 12) - (Math.PI / 2); 
     
-    let x = cx + (radius * 0.85) * Math.cos(vinkel);
-    let y = cy + (radius * 0.85) * Math.sin(vinkel);
+    // DEL DETALJE A: Beregn vinklen for dette tal.
+    // En hel cirkel er 2 * Math.PI. Hvert tal fylder 1/12 af cirklen.
+    // Vi trækker (Math.PI / 2) fra, så indeks 0 (XII) flyttes fra kl. 3 op til kl. 12!
+    let vinkel = i * ((2 * Math.PI) / 12) - (Math.PI / 2);
     
-    ctx.beginPath(); // Vigtigt: Nulstil stien for hver eneste prik
-    ctx.arc(x, y, 6, 0, 2 * Math.PI);
-    ctx.fillStyle = "#e74c3c"; 
-    ctx.fill(); // Mal prikken
+    // DEL DETALJE B: Find de præcise x og y koordinater på skærmen.
+    // Vi ganger med (radius * 0.75) for at trække tallene lidt ind fra urets yderkant.
+    // Vi lægger cx og cy til sidst, fordi vi måler ud fra urets centrum i stedet for øverst til venstre.
+    let x = cx + (radius * 0.75) * Math.cos(vinkel);
+    let y = cy + (radius * 0.75) * Math.sin(vinkel);
+    
+    // DEL DETALJE C: Stempl teksten direkte på det beregnede koordinat.
+    // Da vi brugte textAlign="center" og textBaseline="middle", rammer tallets absolutte midtpunkt præcis på (x,y).
+    ctx.fillText(romertal[i], x, y);
 }
 
-// 3. CENTER-PIN
+// --- 5. CENTER-PIN ---
 ctx.beginPath();
 ctx.arc(cx, cy, 8, 0, 2 * Math.PI);
 ctx.fillStyle = "#34495e";
 ctx.fill();
 ```
 
-Giver logikken bag Sinus/Cosinus og den kvarte omgangs rotation (`- Math.PI / 2`) bedre mening nu?
+## Hvorfor denne metode er anderledes end `rotate()`:
 
-Når du har testet denne rettede urskive af i CodePen, kan vi dykke ned i de specifikke detaljer omkring viserne og tids-loopet i Sektion 2.
+- Tallene står altid snorlige: Læg mærke til, at med denne `sin`/`cos` metode behøver vi overhovedet ikke at "mod-rotere" teksten. Fordi vi aldrig drejer selve canvas-papiret, bevarer teksten sin naturlige orientering og står helt perfekt oprejst hele vejen rundt.
+- Ingen `ctx.translate()` nødvendig: Vi ændrer ikke på canvas' globale koordinatsystem. `(0,0)` forbliver oppe i øverst-venstre hjørne, og vi bruger ren matematik til at finde positionerne ud fra `cx` og `cy`.
+
+---
+
+Prøv at indsætte denne kode i CodePen. Tallene vil placere sig smukt og symmetrisk i toppen, bunden og siderne.
+
+Nu har vi dækket hele dit program for Sektion 1 med begge teknikker! Er du klar til at tage springet til Sektion 2 og kigge på, hvordan vi laver den overordnede `tick`-funktion og tidsloopet, så viserne kan begynde at bevæge sig?
+
