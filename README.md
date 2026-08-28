@@ -38,8 +38,8 @@ const radius = 150;           // Urets størrelse ud fra midten
 
 Computeren forstår ikke ($360^\circ$). Den bruger radianer.
 
-- En hel cirkel ($360^\circ$) er lig med $2 \cdot \pi$ (ca. `6.28`).
-- En halv cirkel ($180^\circ$) er lig med $\pi$ (ca. `3.14`).
+- En hel cirkel ($360^\circ$) er lig med 2pi (ca. `6.28`).
+- En halv cirkel ($180^\circ$) er lig med pi (ca. `3.14`).
 
 Formlen for at lave grader om til radianer:  
 $$\text{radianer} = \text{grader} \cdot \left(\frac{\pi}{180}\right)$$ 
@@ -132,16 +132,16 @@ function tick() {
 
 Der er 60 sekunder på et minut.
 
-- En hel omgang er $2\pi$.
-- Ét sekund (eller ét minut) svarer til: $(2 \cdot \pi) / 60$ radianer.
+- En hel omgang er 2pi.
+- Ét sekund (eller ét minut) svarer til: 2pi/60 radianer.
 
-_Vigtigt:_ I matematik starter $0$ radianer til højre (kl. 3). For at uret starter i toppen (kl. 12), trækker vi altid en kvart omgang fra vinklen: `-(Math.PI / 2)`.
+_Vigtigt:_ I matematik starter 0 radianer til højre (kl. 3). For at uret starter i toppen (kl. 12), trækker vi altid en kvart omgang fra vinklen: `-(Math.PI / 2)`.
 
 ---
 
 ## 3. Tegne en viser med `moveTo` og `lineTo`
 
-Når vi tegner en viser (en lige linje), bruger vi `moveTo(fraX, fraY)` til at sætte pennen på midten `(cx, cy)`, og `lineTo(tilX, tilY)`til at trække stregen ud til urets kant baseret på vinklen ($v$).
+Når vi tegner en viser (en lige linje), bruger vi `moveTo(fraX, fraY)` til at sætte pennen på midten `(cx, cy)`, og `lineTo(tilX, tilY)`til at trække stregen ud til urets kant baseret på vinklen (v).
 
 Her er eksemplet for sekundviseren:
 
