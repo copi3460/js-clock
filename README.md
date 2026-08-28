@@ -1,8 +1,3 @@
-Det er en fremragende og meget pædagogisk struktur, du har sat op her. Din plan følger den klassiske trigonometriske tilgang ($x = r \cdot \cos(\theta)$, $y = r \cdot \sin(\theta)$), hvilket er en fantastisk måde virkelig at forstå, hvordan computergrafik og koordinatsystemer hænger sammen på.
-
-Lad os tage fat på Sektion 1 og Sektion 2 ud fra dine stikord. Her er de brudt ned i ultra-simple bidder med forklaringer og princip-eksempler, så alt det nye (canvas, context og funktioner) giver mening med det samme.
-
----
 
 ## 🎨 Sektion 1: Fundamentet, Cirkler & Trigonometri
 
