@@ -1,4 +1,7 @@
-
+| CodePen, oprette profil<br>Simpel html, canvas og script<br>[w3schools](https://www.w3schools.com/graphics/canvas_intro.asp)<br>JavaScript, tegne en cirkel med arc<br>Grader og radianer<br>Tegne en cirkel med circler (ur skiven)<br> - radius, vinkel, sin, cos, x, y<br> fill, stroke, styles, lineWidth, farver   |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| function<br>setInterval(tick, millisekunder)<br>Date()<br>Sekunder<br>Opdeling af urskiven, hvor mange radianer er et sekund<br>moveTo<br>LineTo<br>længde, tykkelse, cx, cy, x, y, v<br>Millisekunder<br>Minutter<br>Timer<br>Timer + Minutter<br>Array af numre<br>fillText(), hvad er klokken i Romertal<br>Font<br> |
+|                                                                                                                                                                                                                                                                                                                         |
 
 ---
 
@@ -38,8 +41,8 @@ const radius = 150;           // Urets størrelse ud fra midten
 
 Computeren forstår ikke $360^\circ$. Den bruger radianer.
 
-- En hel cirkel ($360^\circ$) er lig med 2pi (ca. `6.28`).
-- En halv cirkel ($180^\circ$) er lig med pi (ca. `3.14`).
+- En hel cirkel ($360^\circ$) er lig med $2 \cdot \pi$ (ca. `6.28`).
+- En halv cirkel ($180^\circ$) er lig med $\pi$ (ca. `3.14`).
 
 Formlen for at lave grader om til radianer:  
 $$\text{radianer} = \text{grader} \cdot \left(\frac{\pi}{180}\right)$$ 
