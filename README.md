@@ -49,18 +49,20 @@ Inden vi tegner med matematik, har canvas en indbygget funktion til cirkler: `c
 Her introducerer vi også Styles (farve og stregtykkelse):
 
 ```javascript
-ctx.beginPath(); // Start en ny tegning (løft pen)
+ctx.fillStyle="pink";         // Baggrundsfarve inden i cirklen
+ctx.beginPath();              // Start en ny tegning (løft pen)
 
 // Tegn cirkel: arc(center-x, center-y, radius, start-radian, slut-radian)
-ctx.arc(cx, cy, radius, 0, 2 * Math.PI); 
+ctx.arc(200,200,20,0,2*Math.PI);
+ctx.fill();                   // fyld cirklen med farve
 
-// Styles (Vores indstillinger)
-ctx.fillStyle = "white";       // Baggrundsfarve inden i cirklen
 ctx.strokeStyle = "#333";      // Stregfarve (kant)
-ctx.lineWidth = 10;            // Stregtykkelse i pixels
+ctx.lineWidth=10;              // Stregtykkelse i pixels
+ctx.beginPath();               // Start en ny tegning (løft pen)
 
-ctx.fill();   // Fyld cirklen ud med hvid
-ctx.stroke(); // Tegn selve kanten op
+// Tegn cirkel: arc(center-x, center-y, radius, start-radian, slut-radian)
+ctx.arc(200,200,190,0,2*Math.PI);
+ctx.stroke();                  // Træk en linje rund om cirklen
 ```
 
 ---
