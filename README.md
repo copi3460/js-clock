@@ -103,9 +103,9 @@ for (let i = 0; i < 12; i++) {
   ctx.beginPath(); 
   
   // Her tegner vi selve prikken (en lille cirkel). 
-  // Fordi vi bruger et minus-tal (-radius * 0.85), hopper vi direkte OP i toppen af uret. 
+  // Fordi vi bruger et minus-tal (-170), hopper vi direkte OP i toppen af uret. 
   // Så den allerførste prik lander helt automatisk på klokken 12!
-  ctx.arc(0, -radius * 0.85, 6, 0, 2 * Math.PI); 
+  ctx.arc(0, -170, 6, 0, 2 * Math.PI); 
   
   // Vi vælger en flot rød farve til prikken.
   ctx.fillStyle = "#e74c3c";  
@@ -120,12 +120,6 @@ for (let i = 0; i < 12; i++) {
   ctx.rotate(timeVinkel); 
 }
 ```
-
-## Hvorfor denne kode er smartere og løser de gamle problemer:
-
-- Ingen `sin` og `cos` overhovedet: Canvas klarer alt det svære grafik-arbejde i baggrunden.
-- Slut med "Klokken 3" problemet: Da vi blot tegner vores prik i `(0, -afstand)`, tegner vi den direkte i toppen af aksen. Vi behøver ikke længere at trække `Math.PI / 2` fra for at tvinge uret op i toppen.
-- Loopet roterer organisk: For hver omgang i loopet tegner vi en prik og drejer papiret 1/12 omgang. Når loopet er færdigt, har canvas drejet sig præcis en hel omgang ($360^\circ$) og står perfekt klar til næste opgave.
 
 ---
 
