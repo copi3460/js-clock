@@ -80,27 +80,45 @@ Her er de vigtige detaljer, du skal kende, før vi ændrer koden:
 Her er den opdaterede JavaScript-kode til din CodePen, hvor alt er lavet om til at bruge `ctx.translate()` og `ctx.rotate()`:
 
 ```javascript
-// Der er 12 timer på et ur. En hel omgang er 2 * Math.PI.
-// Vinklen mellem hver time er derfor: (2 * Math.PI) / 12
-  const radius = 200;
-  const cx = klokken.width/2;
-  const cy = klokken.height/2;
-  const timeVinkel = (2 * Math.PI) / 12;
+// Her bestemmer vi, hvor stort uret skal være. Radius er afstanden fra midten og ud til kanten.
+const radius = 200; 
+
+// Her finder vi det præcise midtpunkt på urets skærm, både vandret (cx) og lodret (cy).
+const cx = klokken.width/2; 
+const cy = klokken.height/2; 
+
+// Der er 12 timer på et ur. Hvis man skal hele vejen rundt i en cirkel (360 grader), 
+// kalder computeren det for "2 * Math.PI". 
+// Vi deler den fulde cirkel med 12, så vi ved præcis, hvor meget vi skal dreje for hver time.
+const timeVinkel = (2 * Math.PI) / 12;  
+
+// Nu flytter vi vores usynlige tegne-hånd hen til midten af uret. 
+// Det gør det meget nemmere at tegne i en cirkel bagefter!
+ctx.translate(cx,cy); 
+
+// Nu laver vi en løkke (en "for-loop"), der gør det samme 12 gange – én gang for hver time.
+for (let i = 0; i < 12; i++) { 
   
-  ctx.translate(cx,cy);
-  for (let i = 0; i < 12; i++) {
-    // Vi tegner prikken direkte på Y-aksen (0, -afstand).
-    // Fordi Y er negativ, går vi lodret OP. Det betyder, at vi starter KLOKKEN 12 automatisk!
-    ctx.beginPath();
-    // Vi går 0 ud af X-aksen, og -135 op ad Y-aksen (radius * 0.85)
-    ctx.arc(0, -radius * 0.85, 6, 0, 2 * Math.PI);
-    ctx.fillStyle = "#e74c3c"; 
-    ctx.fill();
-    
-    // EFTER vi har tegnet prikken, roterer vi hele canvas-papiret
-    // svarende til én times vinkel, så den næste prik bliver tegnet det rigtige sted.
-    ctx.rotate(timeVinkel);
-  }
+  // Gør klar med tegneredskaberne! Nu skal vi i gang med en ny prik.
+  ctx.beginPath(); 
+  
+  // Her tegner vi selve prikken (en lille cirkel). 
+  // Fordi vi bruger et minus-tal (-radius * 0.85), hopper vi direkte OP i toppen af uret. 
+  // Så den allerførste prik lander helt automatisk på klokken 12!
+  ctx.arc(0, -radius * 0.85, 6, 0, 2 * Math.PI); 
+  
+  // Vi vælger en flot rød farve til prikken.
+  ctx.fillStyle = "#e74c3c";  
+  
+  // Farv prikken rød!
+  ctx.fill();  
+  
+  // NU SKER DET MAGISKE: I stedet for at regne ud, hvor den næste prik skal være, 
+  // så drejer vi bare hele papiret en lille smule (svarende til én time). 
+  // Næste gang løkken kører, tegner vi bare "opad" igen, men fordi papiret er drejet, 
+  // lander prikken det helt rigtige sted (på klokken 1!).
+  ctx.rotate(timeVinkel); 
+}
 ```
 
 ## Hvorfor denne kode er smartere og løser de gamle problemer:
