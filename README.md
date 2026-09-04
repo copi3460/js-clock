@@ -108,7 +108,7 @@ for (let i = 0; i < 12; i++) {
   ctx.arc(0, -170, 6, 0, 2 * Math.PI); 
   
   // Vi vælger en flot rød farve til prikken.
-  ctx.fillStyle = "#e74c3c";  
+  ctx.fillStyle = "red";  
   
   // Farv prikken rød!
   ctx.fill();  
