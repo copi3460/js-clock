@@ -33,10 +33,10 @@ const radius = 150;           // Urets størrelse ud fra midten
 
 ## 2. Grader vs. Radianer
 
-Computeren forstår ikke $360^\circ$. Den bruger radianer.
+Computeren forstår ikke 360º. Den bruger radianer.
 
-- En hel cirkel ($360^\circ$) er lig med $2 \cdot \pi$ (ca. `6.28`).
-- En halv cirkel ($180^\circ$) er lig med $\pi$ (ca. `3.14`).
+- En hel cirkel 360º er lig med 2*pi (ca. `6.28`).
+- En halv cirkel 180º er lig med pi (ca. `3.14`).
 
 Formlen for at lave grader om til radianer:  
 $$\text{radianer} = \text{grader} \cdot \left(\frac{\pi}{180}\right)$$ 
