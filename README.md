@@ -314,6 +314,7 @@ ctx.translate(cx,cy);
     ctx.translate(0, radius * 0.73); 
     ctx.rotate(-vinkel);            
   }
+}
 ```
 
 ## De vigtige detaljer i denne teknik:
