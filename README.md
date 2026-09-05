@@ -11,6 +11,7 @@ HTML:
 ```html
 <!-- Canvas er vores hvide papir. standard 0,0 er øverst til venstre -->
 <canvas id="urCanvas" width="400" height="400" style="background:#eee;"></canvas>
+<script src="script.js"></script>
 ```
 
 JavaScript (JS):
