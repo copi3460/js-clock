@@ -1,4 +1,4 @@
-# Canvas Cheatsheet – Clock project
+# Canvas Cheatsheet – klokken
 
 ## 1) Grundlæggende
 
