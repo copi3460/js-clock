@@ -323,78 +323,268 @@ ctx.translate(cx,cy);
 - Hvorfor gå frem og tilbage? Hver gang vi kalder `ctx.translate(0, -radius * 0.75)`, flytter vi det midlertidige `(0,0)` punkt derop, hvor tallet skal stå. For at det næste tal beregnes rigtigt fra midten af uret, er vi nødt til at gå den stik modsat vej tilbage bagefter: `ctx.translate(0, radius * 0.75)`.
 - Uden `ctx.rotate(-vinkel)`: Hvis du prøver at fjerne den linje (og dens modpart i bunden), vil du se, at 6-tallet (eller VI) står helt på hovedet i bunden af uret, og 3-tallet ligger ned. Ved at mod-rotere lige inden vi skriver, sikrer vi, at alle tal står pænt og opret som på et rigtigt ur.
 
----
-Her er det komplette princip-eksempel, hvor vi dropper `ctx.rotate()` og i stedet bruger Cosinus (`Math.cos`) og Sinus (`Math.sin`) til at regne de præcise `(x, y)` koordinater ud for hvert enkelt tal.
+Updated todo list
 
-Dette er en fremragende øvelse, fordi det tvinger os til at forstå den rå geometri bag en cirkel.
+I will read the current script and extract the context methods it uses so I can turn them into a clear wiki-style explanation.
 
-## Det vigtige matematiske princip:
+Read 
 
-Når vi bruger `sin` og `cos` til tekst, skal vi huske den vigtige detalje, vi talte om tidligere: Computeren starter vinkel $0$til højre (klokken 3). For at få vores array-indeks `0` (som er "XII") til at starte i toppen (klokken 12), skal vi trække en kvart omgang fra vinklen via `-(Math.PI / 2)`.
+## Wiki over de ctx-metoder, der bruges i `script.js`
 
-Erstat JavaScript-delen i din CodePen med denne kode for at se det virke:
+I denne kode er `ctx` et Canvas-rendering-context, som oprettes sådan:
 
-```javascript
-const canvas = document.getElementById("urCanvas");
-const ctx = canvas.getContext("2d");
+- `const ctx = klokken.getContext("2d");`
 
-const cx = canvas.width / 2;  // Centrum X (200)
-const cy = canvas.height / 2; // Centrum Y (200)
-const radius = 160;           // Urets ydre radius
-
-// --- 1. TEGN DEN HVIDE BAGGRUND ---
-ctx.beginPath(); 
-ctx.arc(cx, cy, radius, 0, 2 * Math.PI); 
-ctx.fillStyle = "#ffffff";     
-ctx.strokeStyle = "#34495e";   
-ctx.lineWidth = 12;            
-ctx.fill();   
-ctx.stroke(); 
-
-// --- 2. INDSTIL TEKST-STYLES (Meget vigtigt for præcision!) ---
-ctx.font = "bold 20px 'Georgia', serif"; 
-ctx.fillStyle = "#2c3e50";     
-ctx.textAlign = "center";      // Centrer teksten vandret over X-punktet
-ctx.textBaseline = "middle";   // Centrer teksten lodret over Y-punktet
-
-// --- 3. ARRAY MED ROMERTAL ---
-// Indeks 0 er XII (kl. 12), Indeks 1 er I (kl. 1) osv.
-const romertal = ["XII", "I", "II", "III", "IV", "V", "VI", "VII", "VIII", "IX", "X", "XI"];
-
-// --- 4. BEREGN OG TEGN HVERT TAL MED SIN OG COS ---
-for (let i = 0; i < 12; i++) {
-    
-    // DEL DETALJE A: Beregn vinklen for dette tal.
-    // En hel cirkel er 2 * Math.PI. Hvert tal fylder 1/12 af cirklen.
-    // Vi trækker (Math.PI / 2) fra, så indeks 0 (XII) flyttes fra kl. 3 op til kl. 12!
-    let vinkel = i * ((2 * Math.PI) / 12) - (Math.PI / 2);
-    
-    // DEL DETALJE B: Find de præcise x og y koordinater på skærmen.
-    // Vi ganger med (radius * 0.75) for at trække tallene lidt ind fra urets yderkant.
-    // Vi lægger cx og cy til sidst, fordi vi måler ud fra urets centrum i stedet for øverst til venstre.
-    let x = cx + (radius * 0.75) * Math.cos(vinkel);
-    let y = cy + (radius * 0.75) * Math.sin(vinkel);
-    
-    // DEL DETALJE C: Stempl teksten direkte på det beregnede koordinat.
-    // Da vi brugte textAlign="center" og textBaseline="middle", rammer tallets absolutte midtpunkt præcis på (x,y).
-    ctx.fillText(romertal[i], x, y);
-}
-
-// --- 5. CENTER-PIN ---
-ctx.beginPath();
-ctx.arc(cx, cy, 8, 0, 2 * Math.PI);
-ctx.fillStyle = "#34495e";
-ctx.fill();
-```
-
-## Hvorfor denne metode er anderledes end `rotate()`:
-
-- Tallene står altid snorlige: Læg mærke til, at med denne `sin`/`cos` metode behøver vi overhovedet ikke at "mod-rotere" teksten. Fordi vi aldrig drejer selve canvas-papiret, bevarer teksten sin naturlige orientering og står helt perfekt oprejst hele vejen rundt.
-- Ingen `ctx.translate()` nødvendig: Vi ændrer ikke på canvas' globale koordinatsystem. `(0,0)` forbliver oppe i øverst-venstre hjørne, og vi bruger ren matematik til at finde positionerne ud fra `cx` og `cy`.
+Det betyder: “tag canvas-elementet `klokken` og få en 2D-tegningskontekst, så vi kan tegne på det.”
 
 ---
 
-Prøv at indsætte denne kode i CodePen. Tallene vil placere sig smukt og symmetrisk i toppen, bunden og siderne.
+### 1) getContext("2d")
+Beskrivelse:
+- Henter tegne-motoren til canvas i 2D.
+- Gør det muligt at tegne former, tekst, linjer, farver osv.
 
-Nu har vi dækket hele dit program for Sektion 1 med begge teknikker! Er du klar til at tage springet til Sektion 2 og kigge på, hvordan vi laver den overordnede `tick`-funktion og tidsloopet, så viserne kan begynde at bevæge sig?
+Parametre:
+- `"2d"`: angiver at vi vil tegne i 2D (ikke 3D).
+
+Eksempel i koden:
+- `const ctx = klokken.getContext("2d");`
+
+---
+
+### 2) fillStyle
+Beskrivelse:
+- Sætter den farve, der bruges, når noget fyldes.
+- Gælder for former som cirkler, rektangler osv., når vi bruger `fill()`.
+
+Parametre:
+- En farveværdi, f.eks.:
+  - `"pink"`
+  - `"red"`
+  - `"blue"`
+  - `"rgba(255,0,0,0.5)"`
+
+Eksempel:
+- `ctx.fillStyle = "pink";`
+- `ctx.fillStyle = "red";`
+
+---
+
+### 3) strokeStyle
+Beskrivelse:
+- Sætter farven på konturen/linjen omkring en form.
+- Bruges sammen med `stroke()` til at tegne kanten.
+
+Parametre:
+- En farveværdi, fx:
+  - `"red"`
+  - `"blue"`
+  - `"#ff0000"`
+
+Eksempel:
+- `ctx.strokeStyle = "red";`
+- `ctx.strokeStyle = "blue";`
+
+---
+
+### 4) beginPath()
+Beskrivelse:
+- Starter en ny tegne-rute.
+- Det er som at “løfte pen” og begynde på et nyt stykke, så tidligere linjer ikke bliver lagt sammen med nye.
+
+Parametre:
+- Ingen parametre.
+
+Eksempel:
+- `ctx.beginPath();`
+
+Hvorfor det bruges:
+- Før hver ny form bliver tegnet, så vi tydeligt siger: “her starter en ny form”.
+
+---
+
+### 5) lineWidth
+Beskrivelse:
+- Bestemmer tykkelsen af linjer.
+
+Parametre:
+- Et tal i pixels:
+  - `3` = tynd linje
+  - `10` = tykkere linje
+
+Eksempel:
+- `ctx.lineWidth = 3;`
+- `ctx.lineWidth = 10;`
+
+---
+
+### 6) arc(x, y, radius, startAngle, endAngle)
+Beskrivelse:
+- Tegner en bue eller en hel cirkel.
+- Bruges til at lave runde former.
+
+Parametre:
+- `x`: x-position for centrum
+- `y`: y-position for centrum
+- `radius`: radius af cirklen
+- `startAngle`: startvinkel i radianer
+- `endAngle`: slutvinkel i radianer
+
+Vigtige ting:
+- 360° = `2 * Math.PI`
+- 180° = `Math.PI`
+
+Eksempel:
+- `ctx.arc(200, 200, 20, 0, 6.28);`
+- `ctx.arc(200, 200, 190, 0, 2 * Math.PI);`
+
+I koden:
+- Den første cirkel tegnes som en lille ring/dot.
+- Den anden cirkel tegnes som urets ydre ring.
+
+---
+
+### 7) fill()
+Beskrivelse:
+- Fylder den aktuelle form med den valgte `fillStyle`.
+- Det er kun gyldigt, hvis formens sti er defineret først med `beginPath()` og `arc()` eller lignende.
+
+Parametre:
+- Ingen parametre.
+
+Eksempel:
+- `ctx.fill();`
+
+---
+
+### 8) stroke()
+Beskrivelse:
+- Tegner konturen af den aktuelle form.
+- Bruges til at lave en linje rundt om en cirkel eller form.
+
+Parametre:
+- Ingen parametre.
+
+Eksempel:
+- `ctx.stroke();`
+
+---
+
+### 9) translate(x, y)
+Beskrivelse:
+- Flytter koordinatsystemet i canvas.
+- Alt, der tegnes efter dette, vil blive tegnet relativt til den nye position.
+
+Parametre:
+- `x`: hvor meget vi flytter vandret
+- `y`: hvor meget vi flytter lodret
+
+Eksempel:
+- `ctx.translate(cx, cy);`
+
+I koden:
+- De flytter koordinatsystemet til midten af uret:
+  - `cx = klokken.width / 2`
+  - `cy = klokken.height / 2`
+
+Det betyder, at alle efterfølgende figurer kan tegnes som om centrum af uret er `(0,0)`.
+
+---
+
+### 10) rotate(vinkel)
+Beskrivelse:
+- Drejer koordinatsystemet med en given vinkel.
+
+Parametre:
+- `vinkel`: i radianer
+
+Eksempel:
+- `ctx.rotate(timeVinkel);`
+
+I koden:
+- `timeVinkel = (2 * Math.PI) / 12;`
+- Det er én tolvtedel af en hel cirkel.
+- Så hver gang løkken kører, roteres tegningen en lille smule, så de næste markeringer kommer til at ligge i den rigtige position rundt om uret.
+
+---
+
+### 11) fillRect(x, y, width, height)
+Beskrivelse:
+- Tegner et fyldt rektangel.
+
+Parametre:
+- `x`: x-koordinat for rektanglets øverste venstre hjørne
+- `y`: y-koordinat for rektanglets øverste venstre hjørne
+- `width`: bredde
+- `height`: højde
+
+Eksempel:
+- `ctx.fillRect(-7, -160, 14, 28);`
+
+I koden:
+- Det bruges til at tegne en lille “markering” eller “time-indikator” på uret.
+
+---
+
+### 12) font
+Beskrivelse:
+- Sætter skrifttypen, størrelsen og udseendet af teksten.
+
+Parametre:
+- En tekstværdi i CSS-font format, fx:
+  - `"30px Arial"`
+  - `"16px sans-serif"`
+
+Eksempel:
+- `ctx.font = "30px Arial";`
+
+---
+
+### 13) fillText(text, x, y)
+Beskrivelse:
+- Tegner tekst på canvas.
+
+Parametre:
+- `text`: den tekst, der skal vises
+- `x`: x-position
+- `y`: y-position
+
+Eksempel:
+- `ctx.fillText("A", -6, -120);`
+
+I koden bruges det til at skrive et bogstav ved hver time-markering.
+
+---
+
+## Kort opsummering
+
+De vigtigste metoder i `script.js` er:
+
+- `getContext("2d")`
+- `fillStyle`
+- `strokeStyle`
+- `beginPath()`
+- `lineWidth`
+- `arc()`
+- `fill()`
+- `stroke()`
+- `translate()`
+- `rotate()`
+- `fillRect()`
+- `font`
+- `fillText()`
+
+De fleste af dem bruges til at bygge et clock-face:
+- start nye former
+- sæt farver
+- tegn cirkler
+- flyt midten til centrum
+- roter for hver time
+- tegn markeringer og tekst
+
+Hvis du vil, kan jeg også lave en “wiki-side” i det samme format som en lille README, så du kan kopiere den direkte ind i en markdown-fil i projektet.
+
+Created 3 todos
+
+
 
