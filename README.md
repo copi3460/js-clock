@@ -323,268 +323,139 @@ ctx.translate(cx,cy);
 - Hvorfor gå frem og tilbage? Hver gang vi kalder `ctx.translate(0, -radius * 0.75)`, flytter vi det midlertidige `(0,0)` punkt derop, hvor tallet skal stå. For at det næste tal beregnes rigtigt fra midten af uret, er vi nødt til at gå den stik modsat vej tilbage bagefter: `ctx.translate(0, radius * 0.75)`.
 - Uden `ctx.rotate(-vinkel)`: Hvis du prøver at fjerne den linje (og dens modpart i bunden), vil du se, at 6-tallet (eller VI) står helt på hovedet i bunden af uret, og 3-tallet ligger ned. Ved at mod-rotere lige inden vi skriver, sikrer vi, at alle tal står pænt og opret som på et rigtigt ur.
 
-Updated todo list
+# Canvas Cheatsheet – Clock project
 
-I will read the current script and extract the context methods it uses so I can turn them into a clear wiki-style explanation.
+## 1) Grundlæggende
 
-Read 
+```js
+const ctx = klokken.getContext("2d");
+```
 
-## Wiki over de ctx-metoder, der bruges i `script.js`
-
-I denne kode er `ctx` et Canvas-rendering-context, som oprettes sådan:
-
-- `const ctx = klokken.getContext("2d");`
-
-Det betyder: “tag canvas-elementet `klokken` og få en 2D-tegningskontekst, så vi kan tegne på det.”
+- `ctx` = canvas-tegningskontekst
+- `getContext("2d")` = gør det muligt at tegne i 2D
 
 ---
 
-### 1) getContext("2d")
-Beskrivelse:
-- Henter tegne-motoren til canvas i 2D.
-- Gør det muligt at tegne former, tekst, linjer, farver osv.
+## 2) Farver
 
-Parametre:
-- `"2d"`: angiver at vi vil tegne i 2D (ikke 3D).
+```js
+ctx.fillStyle = "pink";
+ctx.strokeStyle = "red";
+ctx.lineWidth = 3;
+```
 
-Eksempel i koden:
-- `const ctx = klokken.getContext("2d");`
+- `fillStyle` = fyldfarve
+- `strokeStyle` = kantfarve
+- `lineWidth` = linjetykkelse i px
 
 ---
 
-### 2) fillStyle
-Beskrivelse:
-- Sætter den farve, der bruges, når noget fyldes.
-- Gælder for former som cirkler, rektangler osv., når vi bruger `fill()`.
+## 3) Former
 
-Parametre:
-- En farveværdi, f.eks.:
-  - `"pink"`
-  - `"red"`
-  - `"blue"`
-  - `"rgba(255,0,0,0.5)"`
+```js
+ctx.beginPath();
+ctx.arc(x, y, radius, startAngle, endAngle);
+ctx.fill();
+ctx.stroke();
+```
+
+- `beginPath()` = start på en ny tegning
+- `arc(x, y, r, start, end)` = tegn cirkel/bue
+- `fill()` = udfyld form
+- `stroke()` = tegn kant
 
 Eksempel:
-- `ctx.fillStyle = "pink";`
-- `ctx.fillStyle = "red";`
+```js
+ctx.arc(200, 200, 190, 0, 2 * Math.PI);
+```
+
+- hele cirkel = `2 * Math.PI`
+- 90° ≈ `Math.PI / 2`
 
 ---
 
-### 3) strokeStyle
-Beskrivelse:
-- Sætter farven på konturen/linjen omkring en form.
-- Bruges sammen med `stroke()` til at tegne kanten.
+## 4) Placering og rotation
 
-Parametre:
-- En farveværdi, fx:
-  - `"red"`
-  - `"blue"`
-  - `"#ff0000"`
+```js
+const cx = klokken.width / 2;
+const cy = klokken.height / 2;
+ctx.translate(cx, cy);
+ctx.rotate(timeVinkel);
+```
+
+- `translate(x, y)` = flyt koordinatsystemet
+- `rotate(vinkel)` = drej hele tegningen
+- `timeVinkel = (2 * Math.PI) / 12;` = én time i cirklen
+
+---
+
+## 5) Rektangler og tekst
+
+```js
+ctx.fillRect(x, y, width, height);
+ctx.font = "30px Arial";
+ctx.fillText("A", x, y);
+```
+
+- `fillRect(x, y, w, h)` = fyldt rektangel
+- `font` = tekststil
+- `fillText(text, x, y)` = tegn tekst
 
 Eksempel:
-- `ctx.strokeStyle = "red";`
-- `ctx.strokeStyle = "blue";`
+```js
+ctx.fillRect(-7, -160, 14, 28);
+ctx.fillText("A", -6, -120);
+```
 
 ---
 
-### 4) beginPath()
-Beskrivelse:
-- Starter en ny tegne-rute.
-- Det er som at “løfte pen” og begynde på et nyt stykke, så tidligere linjer ikke bliver lagt sammen med nye.
+## 6) Uret i praksis
 
-Parametre:
-- Ingen parametre.
+```js
+const radius = 200;
+const cx = klokken.width / 2;
+const cy = klokken.height / 2;
+const timeVinkel = (2 * Math.PI) / 12;
 
-Eksempel:
-- `ctx.beginPath();`
+ctx.translate(cx, cy);
 
-Hvorfor det bruges:
-- Før hver ny form bliver tegnet, så vi tydeligt siger: “her starter en ny form”.
+for (let i = 0; i < 12; i++) {
+  ctx.beginPath();
+  ctx.fillStyle = "red";
+  ctx.fillRect(-7, -160, 14, 28);
+  ctx.rotate(timeVinkel);
+}
+```
 
----
-
-### 5) lineWidth
-Beskrivelse:
-- Bestemmer tykkelsen af linjer.
-
-Parametre:
-- Et tal i pixels:
-  - `3` = tynd linje
-  - `10` = tykkere linje
-
-Eksempel:
-- `ctx.lineWidth = 3;`
-- `ctx.lineWidth = 10;`
+Dette gør:
+- sætter centrum i midten af canvas
+- tegner 12 markeringer rundt om uret
+- roterer en lille smule for hver gang
 
 ---
 
-### 6) arc(x, y, radius, startAngle, endAngle)
-Beskrivelse:
-- Tegner en bue eller en hel cirkel.
-- Bruges til at lave runde former.
+## 7) Hurtig reference
 
-Parametre:
-- `x`: x-position for centrum
-- `y`: y-position for centrum
-- `radius`: radius af cirklen
-- `startAngle`: startvinkel i radianer
-- `endAngle`: slutvinkel i radianer
-
-Vigtige ting:
-- 360° = `2 * Math.PI`
-- 180° = `Math.PI`
-
-Eksempel:
-- `ctx.arc(200, 200, 20, 0, 6.28);`
-- `ctx.arc(200, 200, 190, 0, 2 * Math.PI);`
-
-I koden:
-- Den første cirkel tegnes som en lille ring/dot.
-- Den anden cirkel tegnes som urets ydre ring.
+- `getContext("2d")` → få adgang til tegning
+- `fillStyle` → fyldfarve
+- `strokeStyle` → kantfarve
+- `lineWidth` → linjetykkelse
+- `beginPath()` → ny tegne-rute
+- `arc()` → cirkel/bue
+- `fill()` → udfyld
+- `stroke()` → tegn kant
+- `translate()` → flyt koordinatsystem
+- `rotate()` → drej koordinatsystem
+- `fillRect()` → fyldt rektangel
+- `font` → tekststil
+- `fillText()` → tekst på canvas
 
 ---
 
-### 7) fill()
-Beskrivelse:
-- Fylder den aktuelle form med den valgte `fillStyle`.
-- Det er kun gyldigt, hvis formens sti er defineret først med `beginPath()` og `arc()` eller lignende.
+## 8) Tip til print
 
-Parametre:
-- Ingen parametre.
-
-Eksempel:
-- `ctx.fill();`
-
----
-
-### 8) stroke()
-Beskrivelse:
-- Tegner konturen af den aktuelle form.
-- Bruges til at lave en linje rundt om en cirkel eller form.
-
-Parametre:
-- Ingen parametre.
-
-Eksempel:
-- `ctx.stroke();`
-
----
-
-### 9) translate(x, y)
-Beskrivelse:
-- Flytter koordinatsystemet i canvas.
-- Alt, der tegnes efter dette, vil blive tegnet relativt til den nye position.
-
-Parametre:
-- `x`: hvor meget vi flytter vandret
-- `y`: hvor meget vi flytter lodret
-
-Eksempel:
-- `ctx.translate(cx, cy);`
-
-I koden:
-- De flytter koordinatsystemet til midten af uret:
-  - `cx = klokken.width / 2`
-  - `cy = klokken.height / 2`
-
-Det betyder, at alle efterfølgende figurer kan tegnes som om centrum af uret er `(0,0)`.
-
----
-
-### 10) rotate(vinkel)
-Beskrivelse:
-- Drejer koordinatsystemet med en given vinkel.
-
-Parametre:
-- `vinkel`: i radianer
-
-Eksempel:
-- `ctx.rotate(timeVinkel);`
-
-I koden:
-- `timeVinkel = (2 * Math.PI) / 12;`
-- Det er én tolvtedel af en hel cirkel.
-- Så hver gang løkken kører, roteres tegningen en lille smule, så de næste markeringer kommer til at ligge i den rigtige position rundt om uret.
-
----
-
-### 11) fillRect(x, y, width, height)
-Beskrivelse:
-- Tegner et fyldt rektangel.
-
-Parametre:
-- `x`: x-koordinat for rektanglets øverste venstre hjørne
-- `y`: y-koordinat for rektanglets øverste venstre hjørne
-- `width`: bredde
-- `height`: højde
-
-Eksempel:
-- `ctx.fillRect(-7, -160, 14, 28);`
-
-I koden:
-- Det bruges til at tegne en lille “markering” eller “time-indikator” på uret.
-
----
-
-### 12) font
-Beskrivelse:
-- Sætter skrifttypen, størrelsen og udseendet af teksten.
-
-Parametre:
-- En tekstværdi i CSS-font format, fx:
-  - `"30px Arial"`
-  - `"16px sans-serif"`
-
-Eksempel:
-- `ctx.font = "30px Arial";`
-
----
-
-### 13) fillText(text, x, y)
-Beskrivelse:
-- Tegner tekst på canvas.
-
-Parametre:
-- `text`: den tekst, der skal vises
-- `x`: x-position
-- `y`: y-position
-
-Eksempel:
-- `ctx.fillText("A", -6, -120);`
-
-I koden bruges det til at skrive et bogstav ved hver time-markering.
-
----
-
-## Kort opsummering
-
-De vigtigste metoder i `script.js` er:
-
-- `getContext("2d")`
-- `fillStyle`
-- `strokeStyle`
-- `beginPath()`
-- `lineWidth`
-- `arc()`
-- `fill()`
-- `stroke()`
-- `translate()`
-- `rotate()`
-- `fillRect()`
-- `font`
-- `fillText()`
-
-De fleste af dem bruges til at bygge et clock-face:
-- start nye former
-- sæt farver
-- tegn cirkler
-- flyt midten til centrum
-- roter for hver time
-- tegn markeringer og tekst
-
-Hvis du vil, kan jeg også lave en “wiki-side” i det samme format som en lille README, så du kan kopiere den direkte ind i en markdown-fil i projektet.
-
-Created 3 todos
-
-
+- Brug browserens “Print” eller “Udskriv”
+- Sæt skala til 100%
+- Vis kun denne side
+- Format: A4 / liggende eller stående afhængig af visning
 
