@@ -445,11 +445,61 @@ Dette gør:
 - `fillText()` → tekst på canvas
 
 ---
+## Tiden 
 
-## 8) Tip til print
 
-- Brug browserens “Print” eller “Udskriv”
-- Sæt skala til 100%
-- Vis kun denne side
-- Format: A4 / liggende eller stående afhængig af visning
+  // Hent det aktuelle tidspunkt, så viserne kan tegnes ud fra virkelige data.
+  const nu = new Date();
+
+  // Timerviseren: omregn timer til en vinkel, tegn en streg, og gendan bagefter.
+  const timer = nu.getHours();
+  const timeVinkelTimer = (2 * Math.PI) / 12;
+  const vinkelTimer = timer * timeVinkelTimer;
+  // Gem koordinatsystemet, så vi kan dreje kun denne viser uden at påvirke resten.
+  ctx.save();
+  ctx.rotate(vinkelTimer);
+  // Tegn selve viseren fra centrum og op mod kanten.
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.lineTo(0,-radius*0.5);
+  ctx.lineWidth = 8;
+  ctx.stroke();
+  // Gendan den oprindelige rotation og position.
+  ctx.restore();
+
+  // Minutviseren: samme idé, men med 60 delinger af en hel cirkel.
+  const minutter = nu.getMinutes();
+  const timeVinkelMinutter = (2 * Math.PI) / 60;
+  const vinkelMinutter = minutter * timeVinkelMinutter;
+  // Gem tilstand før vi roterer, så næste tegnede element starter rent.
+  ctx.save();
+  ctx.rotate(vinkelMinutter);
+  // Tegn minutviseren, som er længere end timerviseren.
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.lineTo(0,-radius*0.7);
+  ctx.lineWidth = 5;
+  ctx.stroke();
+  // Tilbage til udgangspunktet efter minutviseren.
+  ctx.restore();
+
+  // Sekundviseren: den opdateres hvert sekund og får en tydelig rød farve.
+  const sekunder = nu.getSeconds();
+  const timeVinkelSekunder = (2 * Math.PI) / 60;
+  const vinkelSekunder = sekunder * timeVinkelSekunder;
+  // Gem og drej igen, så sekundviseren kan tegnes uafhængigt af de andre.
+  ctx.save();
+  ctx.rotate(vinkelSekunder);
+  // Tegn den tynde, lange sekundviser.
+  ctx.beginPath();
+  ctx.moveTo(0,0);
+  ctx.lineTo(0,-radius*0.9);
+  ctx.lineWidth = 2;
+  ctx.strokeStyle = "red";
+  ctx.stroke();
+  // Gendan standardtilstanden, så uret kan afsluttes korrekt.
+  ctx.restore();
+
+  // Flyt koordinatsystemet tilbage til udgangspunktet efter tegningen.
+  ctx.translate(-cx,-cy); 
 
