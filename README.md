@@ -203,12 +203,12 @@ ctx.translate(cx,cy);
 | `strokeStyle` | kantfarve |
 | `lineWidth` | linjetykkelse |
 | `beginPath()` | ny tegne-rute |
-| `arc()` | cirkel/bue |
+| `arc(cx, cy, radius, startvinkel, slutvinkel)` | cirkel/bue |
 | `fill()` | udfyld |
 | `stroke()` | tegn kant |
-| `translate()` | flyt koordinatsystem |
-| `rotate()` | drej koordinatsystem |
-| `fillRect()` | fyldt rektangel |
+| `translate(x, y)` | flyt koordinatsystem |
+| `rotate(vinkel)` | drej koordinatsystem |
+| `fillRect(x, y, bredde, højde)` | fyldt rektangel |
 | `font` | tekststil |
 | `fillText()` | tekst på canvas |
 
