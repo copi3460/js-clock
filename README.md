@@ -435,11 +435,11 @@ Dette gør:
 - `strokeStyle` → kantfarve
 - `lineWidth` → linjetykkelse
 - `beginPath()` → ny tegne-rute
-- `arc()` → cirkel/bue
+- `arc(cx, cy, radius, start, slut)` → cirkel/bue
 - `fill()` → udfyld
 - `stroke()` → tegn kant
-- `translate()` → flyt koordinatsystem
-- `rotate()` → drej koordinatsystem
+- `translate(x, y)` → flyt koordinatsystem
+- `rotate(vinkel)` → drej koordinatsystem
 - `fillRect()` → fyldt rektangel
 - `font` → tekststil
 - `fillText()` → tekst på canvas
@@ -448,11 +448,19 @@ Dette gør:
 ## Tiden 
 
 
+
+```javascript
   // Hent det aktuelle tidspunkt, så viserne kan tegnes ud fra virkelige data.
   const nu = new Date();
-
-  // Timerviseren: omregn timer til en vinkel, tegn en streg, og gendan bagefter.
   const timer = nu.getHours();
+  const minutter = nu.getMinutes();
+  const sekunder = nu.getSeconds();
+```
+
+
+### Time viseren
+```javascript
+  // Timerviseren: omregn timer til en vinkel, tegn en streg, og gendan bagefter.
   const timeVinkelTimer = (2 * Math.PI) / 12;
   const vinkelTimer = timer * timeVinkelTimer;
   // Gem koordinatsystemet, så vi kan dreje kun denne viser uden at påvirke resten.
@@ -466,9 +474,12 @@ Dette gør:
   ctx.stroke();
   // Gendan den oprindelige rotation og position.
   ctx.restore();
+```
 
+
+### Minut viseren
+```javascript
   // Minutviseren: samme idé, men med 60 delinger af en hel cirkel.
-  const minutter = nu.getMinutes();
   const timeVinkelMinutter = (2 * Math.PI) / 60;
   const vinkelMinutter = minutter * timeVinkelMinutter;
   // Gem tilstand før vi roterer, så næste tegnede element starter rent.
@@ -482,9 +493,12 @@ Dette gør:
   ctx.stroke();
   // Tilbage til udgangspunktet efter minutviseren.
   ctx.restore();
+```
 
+
+### Sekund viseren
+```javascript
   // Sekundviseren: den opdateres hvert sekund og får en tydelig rød farve.
-  const sekunder = nu.getSeconds();
   const timeVinkelSekunder = (2 * Math.PI) / 60;
   const vinkelSekunder = sekunder * timeVinkelSekunder;
   // Gem og drej igen, så sekundviseren kan tegnes uafhængigt af de andre.
@@ -502,4 +516,4 @@ Dette gør:
 
   // Flyt koordinatsystemet tilbage til udgangspunktet efter tegningen.
   ctx.translate(-cx,-cy); 
-
+```
