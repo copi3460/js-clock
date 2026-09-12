@@ -1,4 +1,4 @@
-# Canvas Cheatsheet – klokken
+# Canvas wiki – klokken
 
 ## 1) Grundlæggende
 
