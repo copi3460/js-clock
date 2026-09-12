@@ -210,7 +210,7 @@ ctx.translate(cx,cy);
 | `rotate(vinkel)` | drej koordinatsystem |
 | `fillRect(x, y, bredde, højde)` | fyldt rektangel |
 | `font` | tekststil |
-| `fillText()` | tekst på canvas |
+| `fillText(tekst, x, y)` | tekst på canvas |
 
 ---
 # Tiden 
