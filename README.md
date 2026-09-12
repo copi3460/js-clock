@@ -241,12 +241,6 @@ Erstat JavaScript-delen i din CodePen med dette:
 
 ```javascript
 function tick(){
-  ctx.fillStyle = "blue";
-  ctx.fillRect(20, 200, 150, 100); 
-
-  ctx.fillStyle="pink";         // Baggrundsfarve inden i cirklen
-  ctx.beginPath();              // Start en ny tegning (løft pen)
-  
   // Tegn cirkel: arc(center-x, center-y, radius, start-radian, slut-radian)
   ctx.arc(200,200,20,0,2*Math.PI);
   ctx.fill();                   // fyld cirklen med farve
