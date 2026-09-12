@@ -196,19 +196,21 @@ ctx.translate(cx,cy);
 
 # Hurtig reference
 
-- `getContext("2d")` → få adgang til tegning
-- `fillStyle` → fyldfarve
-- `strokeStyle` → kantfarve
-- `lineWidth` → linjetykkelse
-- `beginPath()` → ny tegne-rute
-- `arc(cx, cy, radius, start, slut)` → cirkel/bue
-- `fill()` → udfyld
-- `stroke()` → tegn kant
-- `translate(x, y)` → flyt koordinatsystem
-- `rotate(vinkel)` → drej koordinatsystem
-- `fillRect()` → fyldt rektangel
-- `font` → tekststil
-- `fillText()` → tekst på canvas
+| Funktion | Betydning |
+|---|---|
+| `getContext("2d")` | få adgang til tegning |
+| `fillStyle` | fyldfarve |
+| `strokeStyle` | kantfarve |
+| `lineWidth` | linjetykkelse |
+| `beginPath()` | ny tegne-rute |
+| `arc()` | cirkel/bue |
+| `fill()` | udfyld |
+| `stroke()` | tegn kant |
+| `translate()` | flyt koordinatsystem |
+| `rotate()` | drej koordinatsystem |
+| `fillRect()` | fyldt rektangel |
+| `font` | tekststil |
+| `fillText()` | tekst på canvas |
 
 ---
 # Tiden 
