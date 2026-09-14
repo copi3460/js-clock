@@ -7,7 +7,7 @@ Her er en oversigt over de vigtigste specialtegn, der bruges i [script.js](scrip
 | `.` | punktum / dot | bruges til at få adgang til egenskaber og metoder |
 | `(` og `)` | parenteser / parentheses | bruges til funktionskald og grupperinger |
 | `[` og `]` | firkantede parenteser / square brackets | bruges til arrays og indeksering |
-| `{` og `}` | krøllede parenteser / curly braces | bruges til kodeblokke |
+| `{` og `}` | tuborg klammer / curly braces | bruges til kodeblokke |
 | `;` | semikolon | afslutter en JavaScript-sætning |
 | `,` | komma | adskiller værdier og argumenter |
 | `=` | lighedstegn / equals sign | tildeler værdi |
