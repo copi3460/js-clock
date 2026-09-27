@@ -10,6 +10,7 @@ setInterval(tick, 1000);
 
 function tick(){
   // Tegn cirkel: arc(center-x, center-y, radius, start-radian, slut-radian)
+  ctx.beginPath();
   ctx.arc(200,200,20,0,2*Math.PI);
   ctx.fill();                   // fyld cirklen med farve
   
